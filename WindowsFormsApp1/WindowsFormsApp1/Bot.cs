@@ -9,9 +9,10 @@ namespace WindowsFormsApp1
     internal class Bot
     {
         private Game game;
-        private Random random;
+        private Random random = new Random();
         public Bot(Game game)
         {
+            
             this.game = game;
         }
 

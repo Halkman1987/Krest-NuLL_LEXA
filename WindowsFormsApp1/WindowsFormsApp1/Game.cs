@@ -11,7 +11,7 @@ namespace WindowsFormsApp1
         public bool?[,] BuffDatas; // двумерный массив для хранения информ-ии по заполнению ячеек крестиком или ноликом
         public EventHandler<(int x, int y, bool side)> OnMove;//список обработчиков для события хода (ОнМув)
         public EventHandler<bool> OnWin;// список обработчиков для события победы
-        public bool MoveSide;
+        public bool MoveSide = false;
         public bool FinalGame;
         public int MaxXlenght = 10;
         public int MaxYlenght = 10;
