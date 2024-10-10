@@ -13,14 +13,14 @@ namespace WindowsFormsApp1
         public EventHandler<bool> OnWin;// список обработчиков для события победы
         public bool MoveSide = false;
         public bool FinalGame;
-        public int MaxXlenght = 10;
-        public int MaxYlenght = 10;
+        public int MaxXlenght;
+        public int MaxYlenght;
         public Game(int maxYlenght, int maxXlenght)
         {
             
             MaxYlenght = maxYlenght;
             MaxXlenght = maxXlenght;
-            BuffDatas = new bool?[maxXlenght, maxYlenght];
+            BuffDatas = new bool?[maxXlenght, maxYlenght]; // получаем размерность массива (поля) для игры 
         }
 
         public void Move(bool side, int x, int y)
@@ -30,9 +30,10 @@ namespace WindowsFormsApp1
                 if (BuffDatas[x, y] is null)
                 {
                     BuffDatas[x, y] = side;
-                    OnMove(this, (x, y, side));
+                    OnMove(this, (x, y, side));//прокинули в него данные кто и куда сходил
                     CheckFinal();
-                    MoveSide = !MoveSide;
+                    MoveSide = !MoveSide; //(смена false на true или наоборот в зависимости кто ходил)
+                                          //и если игра не кончилась, то меняется право на ход другого игрока
                 }
                 else
                 {
