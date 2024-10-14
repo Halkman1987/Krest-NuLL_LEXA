@@ -19,55 +19,145 @@ namespace WindowsFormsApp1
         private int cellWidht;
         private Game game;
         private Bot bot;
-        private Risovalka risov;
         bool gameStarted = false;//сомнительно но пусть будет пока
         public Form1()
         {
             InitializeComponent();
            
-            if (gameStarted == false)
-            {
-                gameStarted = true;
-                radioButton1.Enabled = false;
-                radioButton2.Enabled = false;
-            }
-
             game = new Game(10, 10);//вручную задаём размеры виртуального поля для записи в него ходов
             bot = new Bot(game); // прокинули в БОТА текущюю Гаму 
-            game.OnMove += WriteMove; //подписка на событие хода
-            risov = new Risovalka(pctLineXY);
+            game.OnMove += DrawMove; 
+            
             
             //Реальное поле на котором нужно рисовать
-            cellHeight = pctLineXY.Height / 10; // вычисляем шириную ячейки 
-            cellWidht = pctLineXY.Width / 10; // вычисляем высоту ячейки
+            cellHeight = pctLineXY.Height / 10; // вычисляем шириную ячейки в пикселях
+            cellWidht = pctLineXY.Width / 10; // вычисляем высоту ячейки  в пикселях
 
             // game.OnWin += 
         }
         
         //Метод Гаме.Мув выполняет ОнМув, а тот ВраитМув и он уже рисует....ниче не понятно
         
-        private void WriteMove(object sender, (int x, int y, bool side) move) // непонятно как и где он вызывается
+        private void DrawMove(object sender, (int x, int y, bool side) move) // только для рисования, принимает только параметры КУДА и ЧТО рисовать
         {
             var (x, y, side) = move;
             var centrX = (cellHeight * x);
             var centrY = (cellWidht * y);
+           
+            if (side == false)
+            {
+                DrawKrestik(centrX, centrY);
+            }
+            else
+            {
+                DrawNoLik(centrX, centrY);
+            }
+            //рисуешь крестик или нолик  в зависимости кто сходил и что выбрано
+            //if (radioButton1.Checked == true & (side == false || true ))
+            //{
+            //    DrawKrestik(centrX,centrY);
+            //}
+            //else 
+            //{
+            //    DrawNoLik(centrX,centrY);
+            //}
+        }
+        private void pctLineXY_MouseClick(object sender, MouseEventArgs e) // событие клика по пикчербоксу
+        {
+            if (gameStarted == false)
+            {
+                gameStarted = true;
+                radioButton1.Enabled = false;
+                radioButton2.Enabled = false;
+            }
+            int x = e.X / (pctLineXY.Width / 10);//вычисляем порядковый номер ячейки и + 1 (в которой будет стоять мышь) 
+            int y = e.Y / (pctLineXY.Height / 10);
+            bool temp;
+            if (radioButton1.Checked == true)
+            {
+                temp = false;
+               
+            }
+            else
+            {
+                radioButton2.Checked = true;
+                temp =true;
+              
+            }
+            game.Move(temp, x, y);
+            bot.Move();
+            //временно сделали 2 хода для проверки
+            //game.Move(false, x, y); // пока вписали жестко куда будет ходить Человек
+            //bot.Move(); // БОТ ходит рандомно
+        }
+        public void DrawNoLik(int x, int y) // Метод для Нолика
+        {
             Graphics g = pctLineXY.CreateGraphics();
             Pen pn = new Pen(Color.Red, 3);
-            g.DrawEllipse(pn, centrY, centrX, 34, 34);
-            
-            //рисуешь крестик или нолик  в зависимости кто сходил и что выбрано
-            if (radioButton1.Checked == true && (side == false || true ))
-            {
-                risov.CentrovkaKrestika();
-            }
-            else 
-            {
+            g.DrawEllipse(pn, x+3, y+3, 33, 33);
+            //int width = pctLineXY.Width;//ширина поля  в пикселях 
+            //int height = pctLineXY.Height;//высота поля в пикселях
+            //int stepx = width / 10; //ширина ячейки поля в пикселях
+            //int stepy = height / 10;// высота ячейки поля в пикселях
+            //int bufX = e.X / stepx; //количество целых ячеек
+            //int bufY = e.Y / stepy; //количество целых ячеек
+            //int coordinataX = bufX * stepx + (stepx / 2);
+            //int coordinataY = bufY * stepy + (stepy / 2);
+            //Graphics g = pctLineXY.CreateGraphics();
+            //Pen pn = new Pen(Color.Red, 3);
+            //g.DrawEllipse(pn, coordinataX - 17, coordinataY - 17, 34, 34);
 
-            }
+
+        }
+        public void DrawKrestik(int x, int y) // Метод для крестика
+        {
+           
+            int bufX = x / cellHeight; //количество целых ячеек
+            int bufY = y / cellWidht;
+
+            int coordinataX1 = x;// cellHeight;//верхняя левая
+            int coordinataY1 = y;// cellWidht;
+
+            int coordinataX2 = bufX * cellHeight + cellHeight;//верхняя правая
+            int coordinataY2 = bufY * cellWidht;
+
+            int coordinataX3 = bufX * cellHeight;//верхняя правая
+            int coordinataY3 = bufY * cellWidht + cellWidht;
+
+            int coordinataX4 = bufX * cellHeight + cellHeight;//нижняя правая
+            int coordinataY4 = bufY * cellWidht + cellWidht;
+
+            Graphics g = pctLineXY.CreateGraphics();
+            Pen pn = new Pen(Color.Blue, 3);
+            g.DrawLine(pn, coordinataX1, coordinataY1, coordinataX4, coordinataY4);
+            g.DrawLine(pn, coordinataX3, coordinataY3, coordinataX2, coordinataY2);
+            
+            //int width = pctLineXY.Width;
+            //int height = pctLineXY.Height;
+            //int stepx = width / 10; //ширина ячейки 
+            //int stepy = height / 10;// высота ячейки
+            //int bufX = e.X / stepx; //количество целых ячеек
+            //int bufY = e.Y / stepy;
+
+            //int coordinataX1 = bufX * stepx;//верхняя левая
+            //int coordinataY1 = bufY * stepy;
+
+            //int coordinataX2 = bufX * stepx + stepx;//верхняя правая
+            //int coordinataY2 = bufY * stepy;
+
+            //int coordinataX3 = bufX * stepx;//верхняя правая
+            //int coordinataY3 = bufY * stepy + stepy;
+
+            //int coordinataX4 = bufX * stepx + stepx;//нижняя правая
+            //int coordinataY4 = bufY * stepy + stepy;
+
+            //Graphics g = pctLineXY.CreateGraphics();
+            //Pen pn = new Pen(Color.Blue, 3);
+            //g.DrawLine(pn, coordinataX1, coordinataY1, coordinataX4, coordinataY4);
+            //g.DrawLine(pn, coordinataX3, coordinataY3, coordinataX2, coordinataY2);
+
         }
 
-
-        
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -132,42 +222,7 @@ namespace WindowsFormsApp1
         
 
 
-        private void pctLineXY_MouseClick(object sender, MouseEventArgs e) // событие клика по пикчербоксу
-        {
-           //временно сделали 2 хода для проверки
-            game.Move(false, 1, 5); // пока вписали жестко куда будет ходить Человек
-            bot.Move(); // БОТ ходит рандомно
-
-            //if (gameStarted == false)
-            //{
-            //    gameStarted = true;
-            //    radioButton1.Enabled = false;
-            //    radioButton2.Enabled = false;
-            //}
-
-            //int x = e.X / (pctLineXY.Width / 10);
-            //int y = e.Y / (pctLineXY.Height / 10);
-
-           /* if (buffDatas[x, y] == "-")
-                if (radioButton1.Checked == true)
-                {
-                    CentrovkaKrestika(e);
-                    botHodit();
-
-                    //после выполнения хода изменять значение этой ячейки массива на символ, которым сходили только что
-                    //это можно реализовать внутри метода рисования крестика или нолика
-                }
-                else
-                {
-                    CentrovkaNuLLika(e);
-                    botHodit();
-                }
-            else
-            {
-                // botHodit();
-            }*/
-
-        }
+        
         public void botHodit() //ход бота
         {
 

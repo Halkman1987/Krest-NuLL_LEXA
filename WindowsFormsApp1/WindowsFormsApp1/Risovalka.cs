@@ -33,19 +33,6 @@ namespace WindowsFormsApp1
             Pen pn = new Pen(Color.Red, 3);
             g.DrawEllipse(pn, coordinataX - 17, coordinataY - 17, 34, 34);
 
-            //if (buffDatas[bufX, bufY] == "x" || buffDatas[bufX, bufY] == "0")
-            //{
-            //    MessageBox.Show("Выберите другую клетку");
-            //    //g.DrawEllipse(pn, coordinataX - 17, coordinataY - 17, 34, 34);
-            //    //buffDatas[bufX, bufY] = "0";
-            //}
-            //else
-            //{
-            //    g.DrawEllipse(pn, coordinataX - 17, coordinataY - 17, 34, 34);
-            //    buffDatas[bufX, bufY] = "0";
-            //}
-
-
         }
         public void CentrovkaKrestika(MouseEventArgs e) // Метод для крестика
         {
@@ -72,17 +59,6 @@ namespace WindowsFormsApp1
             Pen pn = new Pen(Color.Blue, 3);
             g.DrawLine(pn, coordinataX1, coordinataY1, coordinataX4, coordinataY4);
             g.DrawLine(pn, coordinataX3, coordinataY3, coordinataX2, coordinataY2);
-            
-            //if (buffDatas[bufX, bufY] == "x" || buffDatas[bufX, bufY] == "0")
-            //{
-            //    MessageBox.Show("Выберите другую клетку");
-            //}
-            //else
-            //{
-            //    g.DrawLine(pn, coordinataX1, coordinataY1, coordinataX4, coordinataY4);
-            //    g.DrawLine(pn, coordinataX3, coordinataY3, coordinataX2, coordinataY2);
-            //    //buffDatas[bufX, bufY] = "x";
-            //}
 
         }
     }
