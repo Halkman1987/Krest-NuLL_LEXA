@@ -43,24 +43,31 @@ namespace WindowsFormsApp1
             var (x, y, side) = move;
             var centrX = (cellHeight * x);
             var centrY = (cellWidht * y);
-           
-            if (side == false)
+          //  if((side == false || true) && radioButton1.Checked == true)
+
+            //рисуешь крестик или нолик  в зависимости кто сходил и что выбрано
+            if (radioButton1.Checked == true && side == false)
             {
                 DrawKrestik(centrX, centrY);
             }
             else
             {
-                DrawNoLik(centrX, centrY);
+                if(radioButton1.Checked == true & side == true)
+                {
+                   DrawNoLik(centrX, centrY);
+                }
+                else
+                {
+                    if(radioButton2.Checked == true & side == false)
+                    {
+                        DrawNoLik(centrX, centrY);
+                    }
+                    else
+                    {
+                        DrawKrestik(centrX, centrY);
+                    }
+                }
             }
-            //рисуешь крестик или нолик  в зависимости кто сходил и что выбрано
-            //if (radioButton1.Checked == true & (side == false || true ))
-            //{
-            //    DrawKrestik(centrX,centrY);
-            //}
-            //else 
-            //{
-            //    DrawNoLik(centrX,centrY);
-            //}
         }
         private void pctLineXY_MouseClick(object sender, MouseEventArgs e) // событие клика по пикчербоксу
         {
@@ -73,18 +80,8 @@ namespace WindowsFormsApp1
             int x = e.X / (pctLineXY.Width / 10);//вычисляем порядковый номер ячейки и + 1 (в которой будет стоять мышь) 
             int y = e.Y / (pctLineXY.Height / 10);
             bool temp;
-            if (radioButton1.Checked == true)
-            {
-                temp = false;
-               
-            }
-            else
-            {
-                radioButton2.Checked = true;
-                temp =true;
-              
-            }
-            game.Move(temp, x, y);
+           
+            game.Move(false, x, y);
             bot.Move();
             //временно сделали 2 хода для проверки
             //game.Move(false, x, y); // пока вписали жестко куда будет ходить Человек
@@ -223,7 +220,7 @@ namespace WindowsFormsApp1
 
 
         
-        public void botHodit() //ход бота
+        public void BotHodit() //ход бота
         {
 
             int width = pctLineXY.Width;

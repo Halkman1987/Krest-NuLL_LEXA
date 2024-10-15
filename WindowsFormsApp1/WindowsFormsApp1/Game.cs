@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
 
         public void Move(bool side, int x, int y)
         {
-           side = MoveSide;
+               
            if (side == MoveSide  && !FinalGame)//проверяем сторону и что игра НЕ закончена
             {
                 if (BuffDatas[x, y] is null)

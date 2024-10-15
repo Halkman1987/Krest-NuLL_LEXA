@@ -19,7 +19,7 @@ namespace WindowsFormsApp1
 
         public void Move()
         {
-            if(!game.FinalGame && game.MoveSide == true)
+            if(!game.FinalGame && (game.MoveSide == true || false))
             while (true)
             {
                 var x = random.Next(0, game.MaxXlenght);
